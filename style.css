@@ -1,0 +1,103 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Normalización adicional (opcional) */
+body {
+    line-height: 1.5;
+    font-family: "Roboto",Arial, sans-serif;
+    width: 100%;
+    height: auto;
+}
+
+header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.cart {
+    margin-top: 50px;
+    vertical-align: center;
+    width: 50px;
+    height: 50px;
+}
+
+h2{
+    margin-bottom: 30px;
+}
+
+.productosCarrito{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carrito{
+    word-break:normal;
+    padding: 50px 30px;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 73%;
+    width: 27%;
+    height: 700px;
+    background-color: lightblue;
+    z-index: 1;
+    position: absolute;
+    border-radius: 10px;
+    display: flex;
+    transition: 200ms;
+    opacity: 0;
+}
+
+.carrito.active{
+    transition: 200ms;
+    opacity: 1;
+}
+
+main{
+    z-index: 0;
+}
+
+
+h1{
+    width: 85%;
+    margin-top: 50px;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.itemBox{
+    width: 400px;
+    height: 500px;
+    text-align: center;
+    overflow: hidden;
+    background-color:white;
+    border-radius: 25px;
+}
+
+p{
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.shopItems{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
