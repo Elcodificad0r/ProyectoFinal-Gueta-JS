@@ -59,39 +59,50 @@ const ejemplo = `
                 <h3>Título</h3>
                 <p>Precio: $</p>
                 <p>Cantidad: </p>
-                <button id="botonProducto" class="botonEliminar">X</button>
+                <button class="botonEliminar">X</button>
         
             </div>
         `
 
-function botonesComprar(){
-        const botones = document.getElementsByClassName ("botonCompra")
-        const arrayBotones = Array.from(botones)
+        function botonesComprar() {
+            const botones = document.getElementsByClassName("botonCompra");
+            const arrayBotones = Array.from(botones);
         
-        arrayBotones.forEach(element => {
-                element.addEventListener("click", (evento)=> {
-                    let name = evento.target.parentElement.children[1].innerText;
-                    let price = Number(evento.target.parentElement.children[3].children[0].innerText);
-                    let quantityInput = evento.target.parentElement.querySelector("#quantity"); 
-            let quantity = Number(quantityInput.value) || 1; 
-
-
-                    let productoABuscar = carrito.find(element => element.name == name)
-
-                    if (productoABuscar) {
-                        productoABuscar.quantity += quantity; 
-                    } else {
-                        carrito.push({
-                            name: name,
-                            price: price,
-                            quantity: quantity 
-                        });
-                    }
-
-                    actualizadorCarrito()
-        })
-    }) 
- }
+           
+            function manejarInteraccion(evento) {
+                evento.preventDefault(); 
+                evento.stopPropagation(); 
+        
+                let name = evento.target.parentElement.children[1].innerText;
+                let price = Number(evento.target.parentElement.children[3].children[0].innerText);
+                let quantityInput = evento.target.parentElement.querySelector("#quantity");
+                let quantity = Number(quantityInput.value) || 1;
+        
+                let productoABuscar = carrito.find(element => element.name === name);
+        
+                if (productoABuscar) {
+                    productoABuscar.quantity += quantity;
+                } else {
+                    carrito.push({
+                        name: name,
+                        price: price,
+                        quantity: quantity,
+                    });
+                }
+        
+                actualizadorCarrito();
+            }
+        
+            
+            arrayBotones.forEach(element => {
+               
+                element.addEventListener("click", manejarInteraccion);
+        
+               
+                element.addEventListener("touchstart", manejarInteraccion, { passive: false });
+            });
+        }
+        
 
  function eliminarProduct (){
     const botones = document.getElementsByClassName ("botonEliminar")
