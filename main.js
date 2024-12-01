@@ -2,6 +2,10 @@ document.getElementById("cartIcon").addEventListener("click",() => {
     document.getElementById("cartMenu").classList.toggle("active")
 })
 
+document.getElementById("closeCart").addEventListener("click", () => {
+    document.getElementById("cartMenu").classList.remove("active");
+});
+
 let carrito = JSON.parse(localStorage.getItem("carrito")) || []
 
 const shoesProducts = [
@@ -55,7 +59,7 @@ const ejemplo = `
                 <h3>Título</h3>
                 <p>Precio: $</p>
                 <p>Cantidad: </p>
-                <button class="botonEliminar">X</button>
+                <button id="botonProducto" class="botonEliminar">X</button>
         
             </div>
         `
@@ -151,11 +155,19 @@ botonLimpiador.addEventListener("click", () => {
 })
 
 botonComprador.addEventListener("click", () => {
-    botonComprador.innerHTML = "Gracias por tu compra!"
-     actualizadorCarrito()
-     setTimeout(() => {
-        botonComprador.innerHTML = "Comprar";
-    }, 3000);
+    if (carrito.length > 0) { 
+        botonComprador.innerHTML = "Gracias por tu compra!";
+        carrito = []; 
+        actualizadorCarrito(); 
+        setTimeout(() => {
+            botonComprador.innerHTML = "Comprar";
+        }, 3000); 
+    } else {
+        botonComprador.innerHTML = "El carrito está vacío"; 
+        setTimeout(() => {
+            botonComprador.innerHTML = "Comprar";
+        }, 3000); 
+    }
 });
 
 
