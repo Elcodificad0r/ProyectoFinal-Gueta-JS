@@ -15,25 +15,44 @@ body {
 }
 
 button{
-    padding: 10px;
-    background-color: rgb(221, 221, 221);
+    border-style: none;
+    padding: 5px 10px;
+    background-color: rgb(217, 244, 248);
     border-color: rgb(255, 255, 255);
-    border-radius: 25px;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+}
+
+button:hover{
+    color: whitesmoke;
+    background-color: #0056b3;
+}
+
+.now{
+    translate: 85px 75px;
 }
 
 header{
+    margin-left: 42%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+}
+
+.climb{
+    font-size: 4rem;
 }
 
 span{
     font-family: "Roboto";
     font-size: 2rem;
+    color: rgb(229, 150, 3);
 }
 
 .cart {
     margin-top: 50px;
+    margin-right: 25px;
     vertical-align: center;
     width: 50px;
     height: 50px;
@@ -92,7 +111,6 @@ h2{
 }
 
 
-
 .close-btn {
     position: absolute;
     top: 10px;
@@ -132,6 +150,11 @@ h1{
     overflow: hidden;
     background-color:white;
     border-radius: 25px;
+    transition: scale 0.5s;
+}
+
+.itemBox:hover{
+    scale: 1.1;
 }
 
 p{
@@ -142,13 +165,44 @@ p{
 img {
     width: 50%;
     height: 50%;
-    object-fit: cover;
+    object-fit:contain;
 }
 
 .shopItems{
+    width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
 
 }
+
+.filterContainer {
+    margin:5% 20% ;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin-bottom: 5%;
+}
+
+.filterContainer button {
+    padding: 10px 15px;
+    border: none;
+    background-color: rgb(217, 244, 248);
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+}
+
+.filterContainer button:hover {
+    color: whitesmoke;
+    background-color: #0056b3;
+}
+
+/* .swal2-icon.swal2-success .swal2-success-line .swal2-success-circular-line-left {
+    transform: none !important;
+    rotate: none !important;
+    scale: 1 !important;
+} */
+

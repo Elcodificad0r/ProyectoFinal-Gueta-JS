@@ -1,0 +1,244 @@
+[
+      { 
+          "id": 1,
+          "name": "Sportiva Solution", 
+          "price": 120, 
+          "type": "Boulder",  
+          "img": "./media/la sportiva solution.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 2,
+          "name": "Scarpa Instinct", 
+          "price": 150, 
+          "type": "Deportivo",  
+          "img": "./media/scarpa instict.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 3,
+          "name": "Five Ten Anasazi", 
+          "price": 100, 
+          "type": "Trad", 
+          "img": "./media/five ten anasazi2.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 4,
+          "name": "Evolv Shaman", 
+          "price": 130, 
+          "type": "Boulder", 
+          "img": "./media/evolv shaman.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      }, 
+      { 
+          "id": 5,
+          "name": "Butora Acro", 
+          "price": 110, 
+          "type": "Deportivo", 
+          "img": "./media/butora acro .webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 6,
+          "name": "La Sportiva Miura", 
+          "price": 140, 
+          "type": "Trad", 
+          "img": "./media/la sportiva miura.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 7,
+          "name": "Scarpa Drago", 
+          "price": 160, 
+          "type": "Boulder", 
+          "img": "./media/scarpa drago.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 8,
+          "name": "Five Ten Hiangle", 
+          "price": 125, 
+          "type": "Deportivo", 
+          "img": "./media/five ten hiangle.avif",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 9,
+          "name": "Evolv Phantom", 
+          "price": 155, 
+          "type": "Boulder", 
+          "img": "./media/evolv phantom.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 10,
+          "name": "Butora Endeavor", 
+          "price": 95, 
+          "type": "Trad", 
+          "img": "./media/butora endeavor.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 11,
+          "name": "Tenaya Mundaka", 
+          "price": 135, 
+          "type": "Deportivo", 
+          "img": "./media/tenaya mundaka.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 12,
+          "name": "La Sportiva Kataki", 
+          "price": 145, 
+          "type": "Trad", 
+          "img": "./media/la sportiva kataki.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 13,
+          "name": "Scarpa Vapor", 
+          "price": 120, 
+          "type": "Boulder", 
+          "img": "./media/scarpa vapor.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 14,
+          "name": "Five Ten Quantum", 
+          "price": 115, 
+          "type": "Deportivo", 
+          "img": "./media/five ten quantum.jpeg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 15,
+          "name": "Evolv Kronos", 
+          "price": 100, 
+          "type": "Trad", 
+          "img": "./media/evolv kronos.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 16,
+          "name": "Butora Narsha", 
+          "price": 125, 
+          "type": "Boulder", 
+          "img": "./media/butora narsha.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 17,
+          "name": "Tenaya Oasi", 
+          "price": 140, 
+          "type": "Deportivo", 
+          "img": "./media/tenaya oasi.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 18,
+          "name": "La Sportiva Otaki", 
+          "price": 130, 
+          "type": "Trad", 
+          "img": "./media/la sportiva otaki.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 19,
+          "name": "Scarpa Furia", 
+          "price": 150, 
+          "type": "Boulder", 
+          "img": "./media/scarpa furia.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 20,
+          "name": "Five Ten Dragon", 
+          "price": 155, 
+          "type": "Deportivo", 
+          "img": "./media/five ten dragon.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 21,
+          "name": "Evolv Supra", 
+          "price": 105, 
+          "type": "Trad", 
+          "img": "./media/evolv supra.jpeg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 22,
+          "name": "Butora Brava", 
+          "price": 85, 
+          "type": "Boulder", 
+          "img": "./media/butora brava.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 23,
+          "name": "Tenaya Tarifa", 
+          "price": 145, 
+          "type": "Deportivo", 
+          "img": "./media/tenaya tarifa.webp",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 24,
+          "name": "La Sportiva Python", 
+          "price": 130, 
+          "type": "Trad", 
+          "img": "./media/la sportiva python.jpeg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 25,
+          "name": "Scarpa Chimera", 
+          "price": 170, 
+          "type": "Boulder", 
+          "img": "./media/scarpa chimera.png",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 26,
+          "name": "Five Ten Stonelands", 
+          "price": 90, 
+          "type": "Deportivo", 
+          "img": "./media/five ten stonelands.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 27,
+          "name": "Evolv Geshido", 
+          "price": 115, 
+          "type": "Trad", 
+          "img": "./media/evolv geshido.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 28,
+          "name": "Butora Altura", 
+          "price": 110, 
+          "type": "Boulder", 
+          "img": "./media/butora altura.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 29,
+          "name": "Tenaya Ra", 
+          "price": 135, 
+          "type": "Deportivo", 
+          "img": "./media/tenaya ra.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      },
+      { 
+          "id": 30,
+          "name": "La Sportiva Genius", 
+          "price": 175, 
+          "type": "Trad", 
+          "img": "./media/la sportiva genius.jpg",
+          "size": [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+      }
+    ]
+  
+  
