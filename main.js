@@ -1,4 +1,3 @@
-
 document.getElementById("cart-icon").addEventListener("click", () => {
     document.getElementById("cart-menu").classList.toggle("active");
 });
@@ -22,6 +21,10 @@ const cartIcon = document.getElementById("cart-icon");
 const botonLimpiador = document.getElementById("botonLimpiador");
 const botonComprador = document.getElementById("botonComprador");
 
+let filteredProducts = []; // Para almacenar los productos filtrados
+let currentFilterType = "Todos"; // Valor del filtro por tipo
+let currentSort = "Todos"; // Valor del filtro por precio
+
 function botonesComprar() {
     const botones = document.getElementsByClassName("botonCompra");
     const arrayBotones = Array.from(botones);
@@ -32,6 +35,7 @@ function botonesComprar() {
 
         let name = evento.target.parentElement.children[1].innerText;
         let price = Number(evento.target.parentElement.children[3].children[0].innerText);
+        let imgSrc = evento.target.parentElement.children[0].src; // Captura la imagen
         let quantityInput = evento.target.parentElement.querySelector("#quantity");
         let quantity = Number(quantityInput.value) || 1;
 
@@ -44,17 +48,18 @@ function botonesComprar() {
                 name: name,
                 price: price,
                 quantity: quantity,
+                img: imgSrc, 
             });
         }
 
         Swal.fire({
-            icon: "error",
+            icon: "success",
             position: "bottom-end",
-            title: "Se agrego el producto",
+            title: "Se agregó el producto",
             showConfirmButton: false,
-            timer: 1111500,
+            timer: 800,
             backdrop: false
-          });
+        });
 
         actualizadorCarrito();
     }
@@ -65,35 +70,19 @@ function botonesComprar() {
     });
 }
 
-function eliminarProduct() {
-    const botones = document.getElementsByClassName("botonEliminar");
-    const arrayBotones = Array.from(botones);
-
-    arrayBotones.forEach(element => {
-        element.addEventListener("click", (evento) => {
-            let name = evento.target.parentElement.children[0].innerText;
-            let productoABuscar = carrito.find(element => element.name === name);
-
-            if (productoABuscar.quantity === 1) {
-                let index = carrito.findIndex(element => element.name === name);
-                carrito.splice(index, 1);
-            } else {
-                productoABuscar.quantity -= 1;
-            }
-            actualizadorCarrito();
-        });
-    });
-}
-
 function actualizadorCarrito() {
     carritoProducts.innerHTML = "";
-    carrito.forEach(element => {
+    carrito.forEach((element, index) => {
         carritoProducts.innerHTML += `
         <div class="productosCarrito">
-            <h3>${element.name}</h3>
-            <p>Precio: $ ${element.price}</p>
-            <p>Cantidad: ${element.quantity}</p>
-            <button class="botonEliminar">X</button>
+            <h3>${element.name} <button class="botonEliminar" data-index="${index}">X</button></h3> 
+            <img src="${element.img}" alt="${element.name}" class="imagenCarrito"> 
+            <p>Precio: $${element.price}</p>
+            <p>Cantidad: 
+                <button class="decrementarCantidad" data-index="${index}">-</button>
+                ${element.quantity}
+                <button class="incrementarCantidad" data-index="${index}">+</button>
+            </p>
         </div>
         `;
     });
@@ -101,18 +90,107 @@ function actualizadorCarrito() {
     total.innerText = "TOTAL: $" + carrito.reduce((acc, element) => acc + element.price * element.quantity, 0);
     cartIcon.children[0].innerText = carrito.reduce((acc, element) => acc + element.quantity, 0);
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    eliminarProduct();
+
+    agregarEventListenersCarrito();
+}
+
+function agregarEventListenersCarrito() {
+    const incrementarBotones = document.getElementsByClassName("incrementarCantidad");
+    Array.from(incrementarBotones).forEach(button => {
+        button.addEventListener("click", (evento) => {
+            const index = evento.target.dataset.index;
+            carrito[index].quantity += 1;
+            actualizadorCarrito();
+        });
+    });
+
+    const decrementarBotones = document.getElementsByClassName("decrementarCantidad");
+    Array.from(decrementarBotones).forEach(button => {
+        button.addEventListener("click", (evento) => {
+            const index = evento.target.dataset.index;
+            if (carrito[index].quantity > 1) {
+                carrito[index].quantity -= 1;
+            } else {
+                carrito.splice(index, 1);
+            }
+            actualizadorCarrito();
+        });
+    });
+
+    const botonesEliminar = document.getElementsByClassName("botonEliminar");
+    Array.from(botonesEliminar).forEach(button => {
+        button.addEventListener("click", (evento) => {
+            const index = evento.target.dataset.index;
+            carrito.splice(index, 1);
+            actualizadorCarrito();
+        });
+    });
 }
 
 botonLimpiador.addEventListener("click", () => {
-    carrito = [];
-    localStorage.clear();
-    actualizadorCarrito();
+    Swal.fire({
+        title: "Seguro que quieres vaciar tu carrito?",
+        text: "No podras revertir tu acción",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Borrado!",
+            text: "Tu carrito ha sido borrado.",
+            icon: "success"
+          });
+        carrito = [];
+        localStorage.clear();
+        actualizadorCarrito();
+        }
+      });
 });
 
 botonComprador.addEventListener("click", () => {
     if (carrito.length > 0) {
-        botonComprador.innerHTML = "Gracias por tu compra!";
+        Swal.fire({
+            title: "Información de Envío",
+            html: `
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" class="swal2-input" placeholder="correo@example.com">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" class="swal2-input" placeholder="Nombre de usuario">
+                <label for="address">Dirección:</label>
+                <input type="text" id="address" class="swal2-input" placeholder="Dirección de envío">
+            `,
+            width: '400px', 
+            focusConfirm: false,
+            preConfirm: () => {
+                const email = document.getElementById("email").value;
+                const username = document.getElementById("username").value;
+                const address = document.getElementById("address").value;
+        
+                if (!email || !username || !address) {
+                    Swal.showValidationMessage("Por favor, completa todos los campos");
+                    return false;
+                }
+                return { email, username, address };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { email, username, address } = result.value;
+                Swal.fire({
+                    icon: "success",
+                    title: "Información Guardada",
+                    html: `
+                        <p><strong>Correo:</strong> ${email}</p>
+                        <p><strong>Usuario:</strong> ${username}</p>
+                        <p><strong>Dirección:</strong> ${address}</p>
+                    `,
+                    confirmButtonText: "Aceptar"
+                });
+            }
+        });
+        
         carrito = [];
         actualizadorCarrito();
         setTimeout(() => {
@@ -128,12 +206,12 @@ botonComprador.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dataArray = await dataCaller();
+    filteredProducts = dataArray; // Inicializa los productos filtrados con todos los productos
 
-    //para filtrar y ordenar
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("filterContainer");
     filterContainer.innerHTML = `
-        <button id="filterType">Filtrar: Todos</button>
+        <button id="filterType">Tipo: Todos</button>
         <button id="sortPrice">Ordenar: Todos</button>
     `;
     document.getElementById("mainContent").insertBefore(filterContainer, products);
@@ -146,8 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <img src="${element.img}" alt="">
                 <h3>${element.name}</h3>
                 <p>Estilo: ${element.type}</p>
-                <p>$ <span>${element.price}</span></p>
-                <label for="quantity">Cantidad:</label>
+                <p>$ <span class="priceSpan">${element.price}</span></p>
                 <input type="number" id="quantity" name="quantity" min="1" max="10"> 
                 <button class="botonCompra">Agregar</button>
             </div> 
@@ -156,49 +233,52 @@ document.addEventListener("DOMContentLoaded", async () => {
         botonesComprar();
     };
 
-    renderProducts(dataArray);
+   // Filtro por tipo
+document.getElementById("filterType").addEventListener("click", () => {
+    // Obtener los tipos únicos de productos, incluyendo "Todos" como opción inicial
+    const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
 
-   
-    let typeFilterIndex = 0;
-    let priceSortDirection = 0;
+    // Encontrar el siguiente tipo en la lista que no sea el actual
+    const currentIndex = types.indexOf(currentFilterType);
+    const nextType = types[(currentIndex + 1) % types.length];  // Esto recorre cíclicamente los tipos
 
-    const types = ["Todos", "Boulder", "Trad", "Deportivo"];
-    const priceSortLabels = ["Todos", "Barato > Costoso", "Costoso > Barato"];
+    currentFilterType = nextType;  // Actualizar el filtro actual
+    document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
 
-    // filtro por tipo
-    document.getElementById("filterType").addEventListener("click", () => {
-        typeFilterIndex = (typeFilterIndex + 1) % types.length;
-        const filterType = types[typeFilterIndex];
+    // Filtrar los productos según el tipo seleccionado
+    if (currentFilterType === "Todos") {
+        filteredProducts = dataArray;  // Mostrar todos los productos
+    } else {
+        filteredProducts = dataArray.filter(product => product.type === currentFilterType);
+    }
 
-        const filteredProducts = filterType === "Todos"
-            ? dataArray
-            : dataArray.filter(product => product.type === filterType);
+    // Renderizar los productos filtrados
+    renderProducts(filteredProducts);
+});
+    // Ordenar por precio
+document.getElementById("sortPrice").addEventListener("click", () => {
+    // Definir los estados de ordenación
+    const sortOptions = ["Todos", "Costoso > Barato", "Barato > Costoso"];
 
-        document.getElementById("filterType").innerText = `Filtrar: ${filterType}`;
-        renderProducts(filteredProducts);
-    });
+    // Encontrar el siguiente estado de ordenación en la lista
+    const currentIndex = sortOptions.indexOf(currentSort);
+    currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];  // Alterna entre los tres estados
 
-    //por precio
-    document.getElementById("sortPrice").addEventListener("click", () => {
-        priceSortDirection = (priceSortDirection + 1) % priceSortLabels.length;
-        const sortDirection = priceSortLabels[priceSortDirection];
+    // Actualizar el texto del botón según el estado
+    document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
 
-        let sortedProducts;
-        if (sortDirection === "Barato -> Caro") {
-            sortedProducts = [...dataArray].sort((a, b) => a.price - b.price);
-        } else if (sortDirection === "Caro -> Barato") {
-            sortedProducts = [...dataArray].sort((a, b) => b.price - a.price);
-        } else {
-            sortedProducts = dataArray;
-        }
+    if (currentSort === "Todos") {
+        filteredProducts = dataArray;  // Mostrar los productos sin ordenar
+    } else if (currentSort === "Barato > Costoso") {
+        filteredProducts.sort((a, b) => a.price - b.price);  // Ordenar de barato a costoso
+    } else if (currentSort === "Costoso > Barato") {
+        filteredProducts.sort((a, b) => b.price - a.price);  // Ordenar de costoso a barato
+    }
 
-        document.getElementById("sortPrice").innerText = `Ordenar: ${sortDirection}`;
-        renderProducts(sortedProducts);
-    });
-
-    actualizadorCarrito();
+    renderProducts(filteredProducts);  // Renderizar los productos ordenados
 });
 
 
-//js para landing page
-
+    renderProducts(filteredProducts); // Renderiza los productos iniciales
+    actualizadorCarrito();
+});
