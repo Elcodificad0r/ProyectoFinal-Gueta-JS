@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h3>${element.name}</h3>
                 <p>Estilo: ${element.type}</p>
                 <p>$ <span class="priceSpan">${element.price}</span></p>
-                <input type="number" id="quantity" name="quantity" min="1" max="10"> 
+                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"> 
                 <button class="botonCompra">Agregar</button>
             </div> 
             `;

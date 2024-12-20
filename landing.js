@@ -1,32 +1,44 @@
 const dataCaller = async () => {
-    const response = await fetch("./data.json");
-    const productArray = await response.json();
-    return productArray;
+    try {
+        const response = await fetch("./data.json");
+        if (!response.ok) throw new Error("No se pudo cargar el archivo JSON");
+        const productArray = await response.json();
+        console.log("Productos cargados:", productArray); // Verifica los datos
+        return productArray;
+    } catch (error) {
+        console.error("Error al cargar datos:", error);
+    }
 };
 
 let products = [];
+let currentIndex = 0;
 
 const updateProduct = () => {
     const middleSection = document.getElementById("middleSection");
-    const productInfo = document.querySelector(".product-info");
-    const productName = document.getElementById("productName");
-    const productPrice = document.getElementById("productPrice");
 
-    // Verifica si los productos están cargados
     if (products.length > 0) {
-        middleSection.style.backgroundImage = `url('${products[currentIndex].image}')`;
-        productName.textContent = products[currentIndex].name;
-        productPrice.textContent = products[currentIndex].price;
+        const currentProduct = products[currentIndex];
+        console.log("Producto actual:", currentProduct); // Verifica el producto
+
+        middleSection.innerHTML = `
+            <div class="product-info">
+                <h2 id="productName">${currentProduct.name}</h2>
+                <span id="productPrice">$${currentProduct.price}</span>
+            </div>
+        `;
+
+        middleSection.style.backgroundImage = `url('${currentProduct.img}')`;
+        middleSection.style.backgroundSize = "cover";
+        middleSection.style.backgroundPosition = "center";
 
         currentIndex = (currentIndex + 1) % products.length;
     }
 };
 
-let currentIndex = 0;
-
-// Llamada a la función para cargar los productos
 dataCaller().then((productArray) => {
-    products = productArray;  // Asigna el array de productos
-    setInterval(updateProduct, 3000);  // Rotar cada 3 segundos
-    updateProduct();  // Llamar a la función de inicio
+    if (productArray) {
+        products = productArray;
+        setInterval(updateProduct, 3000); // Rotar cada 3 segundos
+        updateProduct();
+    }
 });
