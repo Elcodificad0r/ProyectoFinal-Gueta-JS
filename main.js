@@ -21,10 +21,9 @@ const cartIcon = document.getElementById("cart-icon");
 const botonLimpiador = document.getElementById("botonLimpiador");
 const botonComprador = document.getElementById("botonComprador");
 
-let filteredProducts = []; // Para almacenar los productos filtrados
-let currentFilterType = "Todos"; // Valor del filtro por tipo
-let currentSort = "Todos"; // Valor del filtro por precio
-
+let filteredProducts = [];
+let currentFilterType = "Todos"; 
+let currentSort = "Todos"; 
 function botonesComprar() {
     const botones = document.getElementsByClassName("botonCompra");
     const arrayBotones = Array.from(botones);
@@ -69,6 +68,34 @@ function botonesComprar() {
         element.addEventListener("touchstart", manejarInteraccion, { passive: false });
     });
 }
+
+function agregarEventListenersCantidad() {
+    const incrementButtons = document.querySelectorAll(".incrementQuantity");
+    const decrementButtons = document.querySelectorAll(".decrementQuantity");
+
+    incrementButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const max = parseInt(quantityInput.max, 10) || Infinity;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue < max) {
+                quantityInput.value = currentValue + 1;
+            }
+        });
+    });
+
+    decrementButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const min = parseInt(quantityInput.min, 10) || 1;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue > min) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+    });
+}
+
 
 function actualizadorCarrito() {
     carritoProducts.innerHTML = "";
@@ -180,7 +207,7 @@ botonComprador.addEventListener("click", () => {
                 const { email, username, address } = result.value;
                 Swal.fire({
                     icon: "success",
-                    title: "Información Guardada",
+                    title: "Gracias por tu compra!",
                     html: `
                         <p><strong>Correo:</strong> ${email}</p>
                         <p><strong>Usuario:</strong> ${username}</p>
@@ -206,7 +233,7 @@ botonComprador.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dataArray = await dataCaller();
-    filteredProducts = dataArray; // Inicializa los productos filtrados con todos los productos
+    filteredProducts = dataArray; 
 
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("filterContainer");
@@ -225,60 +252,66 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h3>${element.name}</h3>
                 <p>Estilo: ${element.type}</p>
                 <p>$ <span class="priceSpan">${element.price}</span></p>
-                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"> 
+                <div class="quantity-container">
+                    <button class="decrementQuantity">-</button>
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"> 
+                    <button class="incrementQuantity">+</button>
+                </div>
                 <button class="botonCompra">Agregar</button>
             </div> 
             `;
         });
-        botonesComprar();
+        botonesComprar(); 
+        agregarEventListenersCantidad(); 
     };
+    
 
-   // Filtro por tipo
+  
 document.getElementById("filterType").addEventListener("click", () => {
-    // Obtener los tipos únicos de productos, incluyendo "Todos" como opción inicial
+   
     const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
 
-    // Encontrar el siguiente tipo en la lista que no sea el actual
+  
     const currentIndex = types.indexOf(currentFilterType);
-    const nextType = types[(currentIndex + 1) % types.length];  // Esto recorre cíclicamente los tipos
+    const nextType = types[(currentIndex + 1) % types.length];  
 
-    currentFilterType = nextType;  // Actualizar el filtro actual
+    currentFilterType = nextType; 
     document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
 
-    // Filtrar los productos según el tipo seleccionado
+   
     if (currentFilterType === "Todos") {
-        filteredProducts = dataArray;  // Mostrar todos los productos
+        filteredProducts = dataArray;  
     } else {
         filteredProducts = dataArray.filter(product => product.type === currentFilterType);
     }
 
-    // Renderizar los productos filtrados
+   
     renderProducts(filteredProducts);
 });
-    // Ordenar por precio
+   
 document.getElementById("sortPrice").addEventListener("click", () => {
-    // Definir los estados de ordenación
+   
     const sortOptions = ["Todos", "Costoso > Barato", "Barato > Costoso"];
 
-    // Encontrar el siguiente estado de ordenación en la lista
+  
     const currentIndex = sortOptions.indexOf(currentSort);
-    currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];  // Alterna entre los tres estados
+    currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];  
 
-    // Actualizar el texto del botón según el estado
+   
     document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
 
     if (currentSort === "Todos") {
-        filteredProducts = dataArray;  // Mostrar los productos sin ordenar
+        filteredProducts = dataArray;  
     } else if (currentSort === "Barato > Costoso") {
-        filteredProducts.sort((a, b) => a.price - b.price);  // Ordenar de barato a costoso
+        filteredProducts.sort((a, b) => a.price - b.price);  
     } else if (currentSort === "Costoso > Barato") {
-        filteredProducts.sort((a, b) => b.price - a.price);  // Ordenar de costoso a barato
+        filteredProducts.sort((a, b) => b.price - a.price);  
     }
 
-    renderProducts(filteredProducts);  // Renderizar los productos ordenados
+    renderProducts(filteredProducts); 
 });
 
 
-    renderProducts(filteredProducts); // Renderiza los productos iniciales
+    renderProducts(filteredProducts);
     actualizadorCarrito();
 });
