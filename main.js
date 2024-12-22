@@ -7,6 +7,9 @@ document.getElementById("close-cart").addEventListener("click", () => {
 });
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let filteredProducts = [];
+let currentFilterType = "Todos"; 
+let currentSort = "Todos"; 
 
 const dataCaller = async () => {
     const response = await fetch("./data.json");
@@ -21,9 +24,6 @@ const cartIcon = document.getElementById("cart-icon");
 const botonLimpiador = document.getElementById("botonLimpiador");
 const botonComprador = document.getElementById("botonComprador");
 
-let filteredProducts = [];
-let currentFilterType = "Todos"; 
-let currentSort = "Todos"; 
 function botonesComprar() {
     const botones = document.getElementsByClassName("botonCompra");
     const arrayBotones = Array.from(botones);
@@ -34,7 +34,7 @@ function botonesComprar() {
 
         let name = evento.target.parentElement.children[1].innerText;
         let price = Number(evento.target.parentElement.children[3].children[0].innerText);
-        let imgSrc = evento.target.parentElement.children[0].src; // Captura la imagen
+        let imgSrc = evento.target.parentElement.children[0].src; 
         let quantityInput = evento.target.parentElement.querySelector("#quantity");
         let quantity = Number(quantityInput.value) || 1;
 
@@ -65,7 +65,7 @@ function botonesComprar() {
 
     arrayBotones.forEach(element => {
         element.addEventListener("click", manejarInteraccion);
-        element.addEventListener("touchstart", manejarInteraccion, { passive: false });
+        element.addEventListener("touchstart", manejarInteraccion, { passive: true });
     });
 }
 
@@ -82,6 +82,15 @@ function agregarEventListenersCantidad() {
                 quantityInput.value = currentValue + 1;
             }
         });
+
+        button.addEventListener("touchstart", (event) => {
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const max = parseInt(quantityInput.max, 10) || Infinity;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue < max) {
+                quantityInput.value = currentValue + 1;
+            }
+        }, { passive: true });
     });
 
     decrementButtons.forEach(button => {
@@ -93,9 +102,17 @@ function agregarEventListenersCantidad() {
                 quantityInput.value = currentValue - 1;
             }
         });
+
+        button.addEventListener("touchstart", (event) => {
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const min = parseInt(quantityInput.min, 10) || 1;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue > min) {
+                quantityInput.value = currentValue - 1;
+            }
+        }, { passive: true });
     });
 }
-
 
 function actualizadorCarrito() {
     carritoProducts.innerHTML = "";
@@ -129,6 +146,12 @@ function agregarEventListenersCarrito() {
             carrito[index].quantity += 1;
             actualizadorCarrito();
         });
+
+        button.addEventListener("touchstart", (evento) => {
+            const index = evento.target.dataset.index;
+            carrito[index].quantity += 1;
+            actualizadorCarrito();
+        }, { passive: true });
     });
 
     const decrementarBotones = document.getElementsByClassName("decrementarCantidad");
@@ -142,6 +165,16 @@ function agregarEventListenersCarrito() {
             }
             actualizadorCarrito();
         });
+
+        button.addEventListener("touchstart", (evento) => {
+            const index = evento.target.dataset.index;
+            if (carrito[index].quantity > 1) {
+                carrito[index].quantity -= 1;
+            } else {
+                carrito.splice(index, 1);
+            }
+            actualizadorCarrito();
+        }, { passive: true });
     });
 
     const botonesEliminar = document.getElementsByClassName("botonEliminar");
@@ -151,30 +184,32 @@ function agregarEventListenersCarrito() {
             carrito.splice(index, 1);
             actualizadorCarrito();
         });
+
+        button.addEventListener("touchstart", (evento) => {
+            const index = evento.target.dataset.index;
+            carrito.splice(index, 1);
+            actualizadorCarrito();
+        }, { passive: true });
     });
 }
 
 botonLimpiador.addEventListener("click", () => {
     Swal.fire({
         title: "Seguro que quieres vaciar tu carrito?",
-        text: "No podras revertir tu acción",
+        text: "No podrás revertir tu acción",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Si"
-      }).then((result) => {
+        confirmButtonText: "Sí"
+    }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
-            title: "Borrado!",
-            text: "Tu carrito ha sido borrado.",
-            icon: "success"
-          });
-        carrito = [];
-        localStorage.clear();
-        actualizadorCarrito();
+            Swal.fire("Borrado!", "Tu carrito ha sido borrado.", "success");
+            carrito = [];
+            localStorage.clear();
+            actualizadorCarrito();
         }
-      });
+    });
 });
 
 botonComprador.addEventListener("click", () => {
@@ -189,13 +224,13 @@ botonComprador.addEventListener("click", () => {
                 <label for="address">Dirección:</label>
                 <input type="text" id="address" class="swal2-input" placeholder="Dirección de envío">
             `,
-            width: '400px', 
+            width: '400px',
             focusConfirm: false,
             preConfirm: () => {
                 const email = document.getElementById("email").value;
                 const username = document.getElementById("username").value;
                 const address = document.getElementById("address").value;
-        
+
                 if (!email || !username || !address) {
                     Swal.showValidationMessage("Por favor, completa todos los campos");
                     return false;
@@ -205,41 +240,30 @@ botonComprador.addEventListener("click", () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 const { email, username, address } = result.value;
-                Swal.fire({
-                    icon: "success",
-                    title: "Gracias por tu compra!",
-                    html: `
-                        <p><strong>Correo:</strong> ${email}</p>
-                        <p><strong>Usuario:</strong> ${username}</p>
-                        <p><strong>Dirección:</strong> ${address}</p>
-                    `,
-                    confirmButtonText: "Aceptar"
-                });
+                Swal.fire("Gracias por tu compra!", `
+                    <p><strong>Correo:</strong> ${email}</p>
+                    <p><strong>Usuario:</strong> ${username}</p>
+                    <p><strong>Dirección:</strong> ${address}</p>
+                `, "success");
             }
         });
-        
+
         carrito = [];
         actualizadorCarrito();
-        setTimeout(() => {
-            botonComprador.innerHTML = "Comprar";
-        }, 3000);
     } else {
-        botonComprador.innerHTML = "El carrito está vacío";
-        setTimeout(() => {
-            botonComprador.innerHTML = "Comprar";
-        }, 3000);
+        Swal.fire("El carrito está vacío", "", "info");
     }
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dataArray = await dataCaller();
-    filteredProducts = dataArray; 
+    filteredProducts = dataArray;
 
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("filterContainer");
     filterContainer.innerHTML = `
-        <button id="filterType">Tipo: Todos</button>
-        <button id="sortPrice">Ordenar: Todos</button>
+        <button id="filterType">Tipo: ${currentFilterType}</button>
+        <button id="sortPrice">Ordenar: ${currentSort}</button>
     `;
     document.getElementById("mainContent").insertBefore(filterContainer, products);
 
@@ -258,59 +282,42 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <button class="incrementQuantity">+</button>
                 </div>
                 <button class="botonCompra">Agregar</button>
-            </div> 
+            </div>
             `;
         });
-        botonesComprar(); 
-        agregarEventListenersCantidad(); 
+        botonesComprar();
+        agregarEventListenersCantidad();
     };
-    
 
-  
-document.getElementById("filterType").addEventListener("click", () => {
-   
-    const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
+    document.getElementById("filterType").addEventListener("click", () => {
+        const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
+        const currentIndex = types.indexOf(currentFilterType);
+        currentFilterType = types[(currentIndex + 1) % types.length];
+        document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
 
-  
-    const currentIndex = types.indexOf(currentFilterType);
-    const nextType = types[(currentIndex + 1) % types.length];  
+        filteredProducts = currentFilterType === "Todos"
+            ? dataArray
+            : dataArray.filter(product => product.type === currentFilterType);
 
-    currentFilterType = nextType; 
-    document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
+        renderProducts(filteredProducts);
+    });
 
-   
-    if (currentFilterType === "Todos") {
-        filteredProducts = dataArray;  
-    } else {
-        filteredProducts = dataArray.filter(product => product.type === currentFilterType);
-    }
+    document.getElementById("sortPrice").addEventListener("click", () => {
+        const sortOptions = ["Todos", "Costoso > Barato", "Barato > Costoso"];
+        const currentIndex = sortOptions.indexOf(currentSort);
+        currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];
+        document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
 
-   
-    renderProducts(filteredProducts);
-});
-   
-document.getElementById("sortPrice").addEventListener("click", () => {
-   
-    const sortOptions = ["Todos", "Costoso > Barato", "Barato > Costoso"];
+        if (currentSort === "Todos") {
+            filteredProducts = dataArray;
+        } else if (currentSort === "Barato > Costoso") {
+            filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (currentSort === "Costoso > Barato") {
+            filteredProducts.sort((a, b) => b.price - a.price);
+        }
 
-  
-    const currentIndex = sortOptions.indexOf(currentSort);
-    currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];  
-
-   
-    document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
-
-    if (currentSort === "Todos") {
-        filteredProducts = dataArray;  
-    } else if (currentSort === "Barato > Costoso") {
-        filteredProducts.sort((a, b) => a.price - b.price);  
-    } else if (currentSort === "Costoso > Barato") {
-        filteredProducts.sort((a, b) => b.price - a.price);  
-    }
-
-    renderProducts(filteredProducts); 
-});
-
+        renderProducts(filteredProducts);
+    });
 
     renderProducts(filteredProducts);
     actualizadorCarrito();

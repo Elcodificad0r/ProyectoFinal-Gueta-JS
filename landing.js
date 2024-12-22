@@ -3,7 +3,6 @@ const dataCaller = async () => {
         const response = await fetch("./data.json");
         if (!response.ok) throw new Error("No se pudo cargar el archivo JSON");
         const productArray = await response.json();
-        console.log("Productos cargados:", productArray);
         return productArray;
     } catch (error) {
         console.error("Error al cargar datos:", error);
@@ -19,7 +18,6 @@ const updateProduct = () => {
 
     if (products.length > 0) {
         const currentProduct = products[currentIndex];
-        console.log("Producto actual:", currentProduct); 
 
         
         middleSection.innerHTML = `
@@ -75,7 +73,6 @@ const redirigirAPaginaDeCompra = () => {
 
 const actualizadorCarrito = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    console.log("Carrito actualizado:", carrito);
 };
 
 const inicializarBotonCarrito = () => {

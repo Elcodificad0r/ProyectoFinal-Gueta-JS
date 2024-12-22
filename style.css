@@ -58,6 +58,7 @@ header{
     font-family: "Roboto";
     font-size: 2rem;
     color: rgb(229, 150, 3);
+    translate: 0 -50px;
 }
 
 .cart {
@@ -122,9 +123,19 @@ p{
         border-radius: 10px 10px 0 0; 
     }
 
+    #cart-icon{
+        translate: 0 -50px;
+    }
+
     header{
         flex-direction: column;
     }
+
+    .itemBox:hover{
+        display: block;
+    }
+
+
 }
 
 
@@ -244,7 +255,8 @@ img {
 
 /* landing page */
 
-#indexContent{
+
+#indexContent {
     display: flex;
     flex-direction: row;
     margin-right: 5%;
@@ -252,55 +264,104 @@ img {
     align-items: center;
 }
 
-.topSection{
-    display: flex;
-    flex-direction: column;
-    width: 10%;
-    text-align: center;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 2rem;
-    text-align: start;
-    margin-bottom: 50%;
 
+@media (max-width: 768px) {
+    
+    header{
+        height: 250px;
+    }
+
+    #indexContent {
+        flex-direction: column;
+        margin-right: 0;
+        justify-content: center;
+        align-items: center;
+        row-gap: 50px; 
+    }
+
+    .topSection {
+        width: 80%;
+        text-align: center;
+        font-size: 1.5rem; 
+        margin-bottom: 20%;
+    }
+
+    .newSection{
+        margin-bottom: 30%;
+    }
+
+    .bottomSection {
+        height: auto; 
+        column-gap: 10%;
+        margin-right: 0;
+        row-gap: 20px; 
+    }
+
+    .bottomContent {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #nextPage {
+        font-size: 30px;
+        margin: 0px; 
+        translate: 0px -100px;
+    }
+
+    .aPageElement{
+        translate: 0px -300px;
+    }
+
+    .nextPage{
+    width: 50px;
+    height: 100px;
+    }
+
+    #middleSection {
+        height: 18rem; 
+        width: 15rem; 
+        border-radius: 15px; 
+        scale: 0.7;
+    }
+
+    #productName {
+        font-size: 2rem; 
+        line-height: 2.5rem;
+        margin-bottom: 10%; 
+    }
+
+    #productPrice {
+        font-size: 1.5rem; 
+        translate: 100% -300%; 
+    }
+
+    .indexCarrito {
+        margin: 15px; 
+        padding: 3px;
+    }
+
+    .indexCarrito:hover {
+        margin: 10px;
+        padding: 4px;
+    }
+
+    .now{
+        margin-right: 0px;
+        padding-right: 0;
+        translate: 0 0;
+        display: block;
+    }
 }
 
-.bottomSection{
-    height: 35%;
-    column-gap: 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-right: 5%;
-}
 
-.bottomContent{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#nextPage{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 5rem;
-    margin-top: 50px;
-    margin-right: 100px;
-}
 
-#nextPage:hover{
-    color: whitesmoke;
-    background-color: #0056b3;
-    border-radius: 50px;
-}
-/* Estilo para middleSection */
 #middleSection {
-    margin: 0% 0%;
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* Evita repeticiones */
-    background-size: cover; /* Ajusta la imagen para cubrir el contenedor */
-    height: 32rem; /* Altura fija */
-    width: 32rem; /* Ancho fijo */
+    margin: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 32rem;
+    width: 32rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -309,10 +370,13 @@ img {
     color: rgb(239, 203, 40);
     font-family: 'Roboto', sans-serif;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-    border-radius: 25px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+.topSection{
+    margin-bottom: 50%;
+}
 
 .product-info {
     position: absolute;
@@ -322,6 +386,19 @@ img {
     z-index: 2;
     text-align: center;
     justify-content: center;
+}
+
+#nextPage {
+    font-size: 7rem;
+    margin-right: 100px;
+    margin-top: 50px; 
+}
+
+#nextPage:hover{
+    color: whitesmoke;
+    background-color: #0056b3;
+    border-radius: 20px;
+
 }
 
 #productName {
@@ -344,7 +421,6 @@ img {
     margin-top: 0px;
 }
 
-
 #middleSection::before {
     content: "";
     position: absolute;
@@ -356,16 +432,20 @@ img {
     object-fit: contain;
 }
 
-
-
-.indexCarrito{
+.indexCarrito {
     cursor: pointer;
 }
 
-.indexCarrito:hover{
+.indexCarrito:hover {
     color: whitesmoke;
     background-color: #0056b3;
     border-radius: 25px;
     margin: 25px;
     padding: 5px;
+}
+
+.newSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
