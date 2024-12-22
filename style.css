@@ -1,23 +1,22 @@
-/* Reset básico */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-a{
+a {
     text-decoration: none;
-    color:#000;
+    color: #000;
 }
 
 body {
     line-height: 1.5;
-    font-family: "Roboto",Arial, sans-serif;
+    font-family: "Roboto", Arial, sans-serif;
     width: 100%;
     height: auto;
 }
 
-button{
+button {
     border-style: none;
     padding: 5px 10px;
     background-color: rgb(217, 244, 248);
@@ -27,16 +26,16 @@ button{
     transition: background-color 0.3s;
 }
 
-button:hover{
+button:hover {
     color: whitesmoke;
     background-color: #0056b3;
 }
 
-.now{
+.now {
     translate: 85px 75px;
 }
 
-header{
+header {
     margin-top: -50px;
     margin-left: 42%;
     display: flex;
@@ -44,17 +43,17 @@ header{
     align-items: center;
 }
 
-.climb{
+.climb {
     font-size: 4rem;
 }
 
-.priceSpan{
+.priceSpan {
     font-family: "Roboto";
     font-size: 2rem;
     color: rgb(229, 150, 3);
 }
 
-.numberSpan{
+.numberSpan {
     font-family: "Roboto";
     font-size: 2rem;
     color: rgb(229, 150, 3);
@@ -69,11 +68,11 @@ header{
     height: 50px;
 }
 
-h2{
+h2 {
     margin-bottom: 30px;
 }
 
-.productosCarrito{
+.productosCarrito {
     margin: 10px;
     display: flex;
     flex-direction: column;
@@ -92,7 +91,6 @@ h2{
     width: 27%;
     height: 100vh; 
     background-color: rgb(219, 98, 0);
-    z-index: 1;
     position: fixed; 
     top: 0;
     right: -100%; 
@@ -104,16 +102,19 @@ h2{
     box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2); 
 }
 
-p{
+p {
     column-gap: 10px;
 }
 
 .carrito.active {
     right: 0;
     opacity: 1;
+    z-index: 1;
 }
 
 @media screen and (max-width: 768px) {
+
+    
     .carrito {
         width: 100%; 
         height: 60%; 
@@ -123,24 +124,28 @@ p{
         border-radius: 10px 10px 0 0; 
     }
 
-    #cart-icon{
+    .carrito:active {
+        right: 0;
+        opacity: 0;
+        z-index: 0;
+    }
+
+    #cart-icon {
         translate: 0 -50px;
     }
 
-    header{
+    header {
         flex-direction: column;
     }
 
-    .itemBox:hover{
-        display: block;
+    .itemBox:hover {
+        display: none;
+        scale: none;
     }
-
-
 }
 
-
 .close-btn {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -157,13 +162,11 @@ p{
     color: #000;
 }
 
-
-main{
+main {
     z-index: 0;
 }
 
-
-h1{
+h1 {
     width: 85%;
     margin-top: 50px;
     text-align: center;
@@ -172,21 +175,21 @@ h1{
     font-style: normal;
 }
 
-.itemBox{
+.itemBox {
     width: 400px;
     height: 500px;
     text-align: center;
     overflow: hidden;
-    background-color:white;
+    background-color: white;
     border-radius: 25px;
     transition: scale 0.5s;
 }
 
-.itemBox:hover{
+.itemBox:hover {
     scale: 1.1;
 }
 
-p{
+p {
     display: flex;
     justify-content: center;
 }
@@ -194,20 +197,19 @@ p{
 img {
     width: 50%;
     height: 50%;
-    object-fit:contain;
+    object-fit: contain;
 }
 
-.shopItems{
+.shopItems {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
-
 }
 
 .filterContainer {
-    margin:5% 20% ;
+    margin: 5% 20%;
     display: flex;
     justify-content: space-evenly;
     gap: 10px;
@@ -229,28 +231,51 @@ img {
     background-color: #0056b3;
 }
 
-.imagenCarrito{
+.imagenCarrito {
     border-radius: 15px;
 }
 
-.carritoTitle{
+.carritoTitle {
     display: flex;
     justify-content: center;
 }
 
-#botonComprador,#botonLimpiador{
+#botonComprador, #botonLimpiador {
     margin: 20px;
     scale: 1.1;
 }
 
-#quantity{
+
+#quantity {
     height: 1.5rem;
-    text-align:end;
-    justify-content: center;
+    text-align: center;
     background-color: #d6f5f9;
     border-radius: 20px;
     border-style: none;
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: textfield; 
+    border: none;
 }
+
+
+#quantity::-webkit-outer-spin-button,
+#quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+#quantity[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+input[type="number"] {
+    appearance: none;
+}
+
+
 
 
 /* landing page */
