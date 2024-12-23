@@ -24,17 +24,27 @@ const botonComprador = document.getElementById("botonComprador");
 let filteredProducts = [];
 let currentFilterType = "Todos"; 
 let currentSort = "Todos"; 
+
+let isTouching = false;
+
 function botonesComprar() {
     const botones = document.getElementsByClassName("botonCompra");
     const arrayBotones = Array.from(botones);
 
     function manejarInteraccion(evento) {
+        if (isTouching) return;
+
+        isTouching = true;
+        setTimeout(() => {
+            isTouching = false;
+        }, 500);
+
         evento.preventDefault();
         evento.stopPropagation();
 
         let name = evento.target.parentElement.children[1].innerText;
         let price = Number(evento.target.parentElement.children[3].children[0].innerText);
-        let imgSrc = evento.target.parentElement.children[0].src; // Captura la imagen
+        let imgSrc = evento.target.parentElement.children[0].src; 
         let quantityInput = evento.target.parentElement.querySelector("#quantity");
         let quantity = Number(quantityInput.value) || 1;
 
@@ -82,6 +92,16 @@ function agregarEventListenersCantidad() {
                 quantityInput.value = currentValue + 1;
             }
         });
+
+        button.addEventListener("touchstart", (event) => {
+            event.preventDefault();
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const max = parseInt(quantityInput.max, 10) || Infinity;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue < max) {
+                quantityInput.value = currentValue + 1;
+            }
+        }, { passive: false });
     });
 
     decrementButtons.forEach(button => {
@@ -93,9 +113,18 @@ function agregarEventListenersCantidad() {
                 quantityInput.value = currentValue - 1;
             }
         });
+
+        button.addEventListener("touchstart", (event) => {
+            event.preventDefault();
+            const quantityInput = event.target.parentElement.querySelector("#quantity");
+            const min = parseInt(quantityInput.min, 10) || 1;
+            let currentValue = parseInt(quantityInput.value, 10) || 1;
+            if (currentValue > min) {
+                quantityInput.value = currentValue - 1;
+            }
+        }, { passive: false });
     });
 }
-
 
 function actualizadorCarrito() {
     carritoProducts.innerHTML = "";
@@ -233,7 +262,7 @@ botonComprador.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dataArray = await dataCaller();
-    filteredProducts = dataArray; 
+    filteredProducts = dataArray;
 
     const filterContainer = document.createElement("div");
     filterContainer.classList.add("filterContainer");
@@ -264,54 +293,68 @@ document.addEventListener("DOMContentLoaded", async () => {
         botonesComprar(); 
         agregarEventListenersCantidad(); 
     };
+
     
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-  
-document.getElementById("filterType").addEventListener("click", () => {
-   
-    const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
+    
+    if (isMobile) {
+        
+        document.querySelectorAll('.itemBox').forEach(itemBox => {
+            
+            itemBox.style.pointerEvents = "none";
 
-  
-    const currentIndex = types.indexOf(currentFilterType);
-    const nextType = types[(currentIndex + 1) % types.length];  
+           
+            const buttons = itemBox.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.style.pointerEvents = "auto"; 
+            });
 
-    currentFilterType = nextType; 
-    document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
+            
+            const inputQuantity = itemBox.querySelector('input[type="number"]');
+            if (inputQuantity) {
+                inputQuantity.style.pointerEvents = "auto"; 
+            }
 
-   
-    if (currentFilterType === "Todos") {
-        filteredProducts = dataArray;  
-    } else {
-        filteredProducts = dataArray.filter(product => product.type === currentFilterType);
+            
+            const imagesAndText = itemBox.querySelectorAll('img, h3, p');
+            imagesAndText.forEach(item => {
+                item.style.pointerEvents = "none"; 
+            });
+        });
     }
 
-   
+    document.getElementById("filterType").addEventListener("click", () => {
+        const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
+        let typeIndex = types.indexOf(currentFilterType);
+        typeIndex = (typeIndex + 1) % types.length;
+        currentFilterType = types[typeIndex];
+        document.getElementById("filterType").innerText = `Tipo: ${currentFilterType}`;
+
+        if (currentFilterType === "Todos") {
+            filteredProducts = dataArray;
+        } else {
+            filteredProducts = dataArray.filter(item => item.type === currentFilterType);
+        }
+        renderProducts(filteredProducts);
+    });
+
+    document.getElementById("sortPrice").addEventListener("click", () => {
+        const sortOptions = ["Todos", "Menor a mayor", "Mayor a menor"];
+        let sortIndex = sortOptions.indexOf(currentSort);
+        sortIndex = (sortIndex + 1) % sortOptions.length;
+        currentSort = sortOptions[sortIndex];
+        document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
+
+        if (currentSort === "Todos") {
+            renderProducts(filteredProducts);
+        } else {
+            const sorted = [...filteredProducts].sort((a, b) => {
+                return currentSort === "Menor a mayor" ? a.price - b.price : b.price - a.price;
+            });
+            renderProducts(sorted);
+        }
+    });
+
     renderProducts(filteredProducts);
-});
-   
-document.getElementById("sortPrice").addEventListener("click", () => {
-   
-    const sortOptions = ["Todos", "Costoso > Barato", "Barato > Costoso"];
-
-  
-    const currentIndex = sortOptions.indexOf(currentSort);
-    currentSort = sortOptions[(currentIndex + 1) % sortOptions.length];  
-
-   
-    document.getElementById("sortPrice").innerText = `Ordenar: ${currentSort}`;
-
-    if (currentSort === "Todos") {
-        filteredProducts = dataArray;  
-    } else if (currentSort === "Barato > Costoso") {
-        filteredProducts.sort((a, b) => a.price - b.price);  
-    } else if (currentSort === "Costoso > Barato") {
-        filteredProducts.sort((a, b) => b.price - a.price);  
-    }
-
-    renderProducts(filteredProducts); 
-});
-
-
-    renderProducts(filteredProducts);
-    actualizadorCarrito();
 });

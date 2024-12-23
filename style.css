@@ -14,6 +14,7 @@ body {
     font-family: "Roboto", Arial, sans-serif;
     width: 100%;
     height: auto;
+    overflow-y: auto;
 }
 
 button {
@@ -100,6 +101,7 @@ h2 {
     opacity: 0;
     overflow-y: auto;
     box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2); 
+    translate: 50000px;
 }
 
 p {
@@ -110,6 +112,7 @@ p {
     right: 0;
     opacity: 1;
     z-index: 1;
+    translate: 0px;
 }
 
 @media screen and (max-width: 768px) {
@@ -142,7 +145,27 @@ p {
         display: none;
         scale: none;
     }
+   
+.itemBox {
+    pointer-events: none; 
+    position: relative; 
+  }
+  
+  
+  .itemBox button,
+  .itemBox input[type="number"] {
+    pointer-events: auto; 
+  }
+  
+  
+  .itemBox img,
+  .itemBox h3,
+  .itemBox p {
+    pointer-events: none; 
+  }
+  
 }
+
 
 .close-btn {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -206,6 +229,7 @@ img {
     justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
+    max-height: 1000px; 
 }
 
 .filterContainer {
@@ -266,9 +290,9 @@ img {
 }
 
 
-#quantity[type="number"] {
+/* #quantity[type="number"] {
     -moz-appearance: textfield;
-}
+} */
 
 
 input[type="number"] {
