@@ -1,3 +1,4 @@
+// Función para cargar datos del archivo JSON
 const dataCaller = async () => {
     try {
         const response = await fetch("./data.json");
@@ -9,42 +10,46 @@ const dataCaller = async () => {
     }
 };
 
+// Variables globales
 let products = [];
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let currentIndex = 0;
 
+// Actualiza el producto mostrado en la sección principal
 const updateProduct = () => {
     const middleSection = document.getElementById("middleSection");
 
     if (products.length > 0) {
         const currentProduct = products[currentIndex];
 
-        
+        // Actualizamos el contenido y el fondo de la sección principal
         middleSection.innerHTML = `
             <div class="product-info">
                 <span id="productPrice">$${currentProduct.price}</span>
                 <h2 id="productName">${currentProduct.name}</h2>
             </div>
         `;
-
-        
         middleSection.style.backgroundImage = `url('${currentProduct.img}')`;
         middleSection.style.backgroundSize = "cover";
         middleSection.style.backgroundPosition = "center";
 
-       
+        // Avanzamos al siguiente producto
         currentIndex = (currentIndex + 1) % products.length;
     }
 };
 
+// Agrega el producto actual al carrito
 const agregarAlCarrito = () => {
     if (products.length > 0) {
-        const currentProduct = products[(currentIndex - 1 + products.length) % products.length]; 
+        // Producto actualmente visible en la página
+        const currentProduct = products[(currentIndex - 1 + products.length) % products.length];
         const productoExistente = carrito.find(item => item.name === currentProduct.name);
 
         if (productoExistente) {
+            // Incrementar cantidad si el producto ya está en el carrito
             productoExistente.quantity += 1;
         } else {
+            // Agregar nuevo producto al carrito
             carrito.push({
                 name: currentProduct.name,
                 price: currentProduct.price,
@@ -53,6 +58,7 @@ const agregarAlCarrito = () => {
             });
         }
 
+        // Notificación de éxito
         Swal.fire({
             icon: "success",
             position: "bottom-end",
@@ -62,19 +68,17 @@ const agregarAlCarrito = () => {
             backdrop: false
         });
 
+        // Actualizamos el carrito en localStorage
         actualizadorCarrito();
-        redirigirAPaginaDeCompra();
     }
 };
 
-const redirigirAPaginaDeCompra = () => {
-    window.location.href = "./shopping.html"; 
-};
-
+// Guarda el carrito en localStorage
 const actualizadorCarrito = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
 };
 
+// Inicializa el botón de agregar al carrito
 const inicializarBotonCarrito = () => {
     const bottomSectionButton = document.querySelector(".bottomSection img");
     if (bottomSectionButton) {
@@ -82,22 +86,10 @@ const inicializarBotonCarrito = () => {
     }
 };
 
-
-dataCaller().then((productArray) => {
-    if (productArray) {
-        products = productArray;
-        setInterval(updateProduct, 3000);
-        updateProduct();
-        inicializarBotonCarrito();
-    }
-});
-
-const API_URL = "https://restcountries.com/v3.1/name/"; 
-
+// Inyección del campo de entrada para el país y su lógica
 const injectCountryInput = () => {
     const topSection = document.querySelector(".topSection");
 
-   
     topSection.innerHTML = `
         <div class="country-input-wrapper">
             <input type="text" id="countryInput" placeholder="Ingresa tu país" />
@@ -105,7 +97,6 @@ const injectCountryInput = () => {
         </div>
     `;
 
-    
     const style = document.createElement("style");
     style.textContent = `
         .country-input-wrapper {
@@ -127,18 +118,17 @@ const injectCountryInput = () => {
     `;
     document.head.appendChild(style);
 
-    
     const countryInput = document.getElementById("countryInput");
     countryInput.addEventListener("change", async (event) => {
         const countryName = event.target.value.trim();
         if (countryName) {
             try {
+                const API_URL = "https://restcountries.com/v3.1/name/";
                 const response = await fetch(`${API_URL}${countryName}`);
                 if (!response.ok) throw new Error("No se pudo obtener la bandera del país.");
                 const [countryData] = await response.json();
                 const countryFlag = countryData.flags.png;
 
-                
                 Swal.fire({
                     title: `Envíos disponibles a ${countryData.name.common}`,
                     text: "¡Hacemos envíos a tu país!",
@@ -149,7 +139,6 @@ const injectCountryInput = () => {
                     confirmButtonText: "¡Genial!"
                 });
 
-               
                 const countryIcon = document.getElementById("countryIcon");
                 countryIcon.style.display = "inline";
             } catch (error) {
@@ -159,7 +148,7 @@ const injectCountryInput = () => {
                     text: "No hacemos envíos a este país o el nombre es incorrecto.",
                     confirmButtonText: "Intentar de nuevo"
                 });
-                
+
                 const countryIcon = document.getElementById("countryIcon");
                 countryIcon.style.display = "none";
             }
@@ -167,6 +156,14 @@ const injectCountryInput = () => {
     });
 };
 
+// Inicialización del script
+dataCaller().then((productArray) => {
+    if (productArray) {
+        products = productArray;
+        setInterval(updateProduct, 3000);
+        updateProduct();
+        inicializarBotonCarrito();
+    }
+});
 
 injectCountryInput();
-

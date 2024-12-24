@@ -22,8 +22,8 @@ const botonLimpiador = document.getElementById("botonLimpiador");
 const botonComprador = document.getElementById("botonComprador");
 
 let filteredProducts = [];
-let currentFilterType = "Todos"; 
-let currentSort = "Todos"; 
+let currentFilterType = "Todos";
+let currentSort = "Todos";
 
 let isTouching = false;
 
@@ -44,7 +44,7 @@ function botonesComprar() {
 
         let name = evento.target.parentElement.children[1].innerText;
         let price = Number(evento.target.parentElement.children[3].children[0].innerText);
-        let imgSrc = evento.target.parentElement.children[0].src; 
+        let imgSrc = evento.target.parentElement.children[0].src;
         let quantityInput = evento.target.parentElement.querySelector("#quantity");
         let quantity = Number(quantityInput.value) || 1;
 
@@ -57,7 +57,7 @@ function botonesComprar() {
                 name: name,
                 price: price,
                 quantity: quantity,
-                img: imgSrc, 
+                img: imgSrc,
             });
         }
 
@@ -131,10 +131,10 @@ function actualizadorCarrito() {
     carrito.forEach((element, index) => {
         carritoProducts.innerHTML += `
         <div class="productosCarrito">
-            <h3>${element.name} <button class="botonEliminar" data-index="${index}">X</button></h3> 
-            <img src="${element.img}" alt="${element.name}" class="imagenCarrito"> 
+            <h3>${element.name} <button class="botonEliminar" data-index="${index}">X</button></h3>
+            <img src="${element.img}" alt="${element.name}" class="imagenCarrito">
             <p>Precio: $${element.price}</p>
-            <p>Cantidad: 
+            <p>Cantidad:
                 <button class="decrementarCantidad" data-index="${index}">-</button>
                 ${element.quantity}
                 <button class="incrementarCantidad" data-index="${index}">+</button>
@@ -192,18 +192,18 @@ botonLimpiador.addEventListener("click", () => {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Si"
-      }).then((result) => {
+    }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
-            title: "Borrado!",
-            text: "Tu carrito ha sido borrado.",
-            icon: "success"
-          });
-        carrito = [];
-        localStorage.clear();
-        actualizadorCarrito();
+            Swal.fire({
+                title: "Borrado!",
+                text: "Tu carrito ha sido borrado.",
+                icon: "success"
+            });
+            carrito = [];
+            localStorage.clear();
+            actualizadorCarrito();
         }
-      });
+    });
 });
 
 botonComprador.addEventListener("click", () => {
@@ -218,13 +218,13 @@ botonComprador.addEventListener("click", () => {
                 <label for="address">Dirección:</label>
                 <input type="text" id="address" class="swal2-input" placeholder="Dirección de envío">
             `,
-            width: '400px', 
+            width: '400px',
             focusConfirm: false,
             preConfirm: () => {
                 const email = document.getElementById("email").value;
                 const username = document.getElementById("username").value;
                 const address = document.getElementById("address").value;
-        
+
                 if (!email || !username || !address) {
                     Swal.showValidationMessage("Por favor, completa todos los campos");
                     return false;
@@ -246,7 +246,7 @@ botonComprador.addEventListener("click", () => {
                 });
             }
         });
-        
+
         carrito = [];
         actualizadorCarrito();
         setTimeout(() => {
@@ -283,46 +283,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p>$ <span class="priceSpan">${element.price}</span></p>
                 <div class="quantity-container">
                     <button class="decrementQuantity">-</button>
-                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" onkeydown="return false" onwheel="return false"> 
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" onkeydown="return false" onwheel="return false">
                     <button class="incrementQuantity">+</button>
                 </div>
                 <button class="botonCompra">Agregar</button>
-            </div> 
+            </div>
             `;
         });
-        botonesComprar(); 
-        agregarEventListenersCantidad(); 
+        botonesComprar();
+        agregarEventListenersCantidad();
     };
-
-    
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-    
-    if (isMobile) {
-        
-        document.querySelectorAll('.itemBox').forEach(itemBox => {
-            
-            itemBox.style.pointerEvents = "none";
-
-           
-            const buttons = itemBox.querySelectorAll('button');
-            buttons.forEach(button => {
-                button.style.pointerEvents = "auto"; 
-            });
-
-            
-            const inputQuantity = itemBox.querySelector('input[type="number"]');
-            if (inputQuantity) {
-                inputQuantity.style.pointerEvents = "auto"; 
-            }
-
-            
-            const imagesAndText = itemBox.querySelectorAll('img, h3, p');
-            imagesAndText.forEach(item => {
-                item.style.pointerEvents = "none"; 
-            });
-        });
-    }
 
     document.getElementById("filterType").addEventListener("click", () => {
         const types = ["Todos", ...new Set(dataArray.map(product => product.type))];
@@ -357,4 +327,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     renderProducts(filteredProducts);
+
+    actualizadorCarrito(); 
 });
