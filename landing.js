@@ -1,4 +1,4 @@
-// Función para cargar datos del archivo JSON
+
 const dataCaller = async () => {
     try {
         const response = await fetch("./data.json");
@@ -10,19 +10,19 @@ const dataCaller = async () => {
     }
 };
 
-// Variables globales
+
 let products = [];
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let currentIndex = 0;
 
-// Actualiza el producto mostrado en la sección principal
+
 const updateProduct = () => {
     const middleSection = document.getElementById("middleSection");
 
     if (products.length > 0) {
         const currentProduct = products[currentIndex];
 
-        // Actualizamos el contenido y el fondo de la sección principal
+        
         middleSection.innerHTML = `
             <div class="product-info">
                 <span id="productPrice">$${currentProduct.price}</span>
@@ -33,23 +33,23 @@ const updateProduct = () => {
         middleSection.style.backgroundSize = "cover";
         middleSection.style.backgroundPosition = "center";
 
-        // Avanzamos al siguiente producto
+        
         currentIndex = (currentIndex + 1) % products.length;
     }
 };
 
-// Agrega el producto actual al carrito
+
 const agregarAlCarrito = () => {
     if (products.length > 0) {
-        // Producto actualmente visible en la página
+        
         const currentProduct = products[(currentIndex - 1 + products.length) % products.length];
         const productoExistente = carrito.find(item => item.name === currentProduct.name);
 
         if (productoExistente) {
-            // Incrementar cantidad si el producto ya está en el carrito
+           
             productoExistente.quantity += 1;
         } else {
-            // Agregar nuevo producto al carrito
+           
             carrito.push({
                 name: currentProduct.name,
                 price: currentProduct.price,
@@ -58,7 +58,7 @@ const agregarAlCarrito = () => {
             });
         }
 
-        // Notificación de éxito
+       
         Swal.fire({
             icon: "success",
             position: "bottom-end",
@@ -68,17 +68,17 @@ const agregarAlCarrito = () => {
             backdrop: false
         });
 
-        // Actualizamos el carrito en localStorage
+       
         actualizadorCarrito();
     }
 };
 
-// Guarda el carrito en localStorage
+
 const actualizadorCarrito = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
 };
 
-// Inicializa el botón de agregar al carrito
+
 const inicializarBotonCarrito = () => {
     const bottomSectionButton = document.querySelector(".bottomSection img");
     if (bottomSectionButton) {
@@ -86,7 +86,7 @@ const inicializarBotonCarrito = () => {
     }
 };
 
-// Inyección del campo de entrada para el país y su lógica
+
 const injectCountryInput = () => {
     const topSection = document.querySelector(".topSection");
 
@@ -156,7 +156,7 @@ const injectCountryInput = () => {
     });
 };
 
-// Inicialización del script
+
 dataCaller().then((productArray) => {
     if (productArray) {
         products = productArray;
